@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -28,7 +28,13 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public Product update(@PathVariable Integer id ,@RequestBody Product product){
-        return productRepository.findById(id).orElse(null);
+        Product existing = productRepository.findById(id).orElse(null);
+        if(existing !=null){
+            existing.setPrice(product.getPrice());
+            existing.setPrice(product.getPrice());
+            return productRepository.save(existing);
+        }
+        return null;
     }
 
     @PatchMapping("/{id}/price")
